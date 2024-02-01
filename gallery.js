@@ -65,9 +65,10 @@ const images = [
 ];
 
 
-document.addEventListener('DOMContentLoaded', function () {
-    const container = document.querySelector('.gallery');
 
+    const container = document.querySelector('.gallery');
+    container.innerHTML = createImagesMarkup(images);
+    let currentModal;
 
     function createImagesMarkup(images) {
         return images.map(({ preview, original, description }) =>
@@ -83,7 +84,30 @@ document.addEventListener('DOMContentLoaded', function () {
 </li>`).join('');
 }
 
-    container.insertAdjacentHTML('beforeend', createImagesMarkup(images));
+container.addEventListener('click', galleryItemClick);
+    
+    function galleryItemClick(event) {
+        event.preventDefault();
+        const target = event.target;
+        
+        if (target.classList.contains('gallery-image')) {
+        const largeImageUrl = target.dataset.source;
+            modalWindow(largeImageUrl);
+    }
+}
 
-    console.log(createImagesMarkup(images));
-});
+function modalWindow(imgUrl) {
+    currentModal = basicLightbox.create(
+        ` <img src="${imgUrl}" width="800" height="600">`
+    );
+
+    currentModal.show()
+}
+
+document.addEventListener('keyup', ({ code }) => {
+    if (code !== 'Escape') {
+        return
+    }
+    currentModal.close();
+})
+
