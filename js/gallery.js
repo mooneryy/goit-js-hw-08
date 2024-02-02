@@ -101,13 +101,19 @@ function modalWindow(imgUrl) {
         ` <img src="${imgUrl}" width="800" height="600">`
     );
 
-    currentModal.show()
+    currentModal.element().addEventListener('click', (event) => {
+        if (event.target === currentModal.element()) {
+            currentModal.close();
+       }
+    });
+
+    document.addEventListener('keyup', handleKeyUp);
+
+    currentModal.show();
 }
 
-document.addEventListener('keyup', ({ code }) => {
-    if (code !== 'Escape') {
-        return
+function handleKeyUp({ code }) {
+    if (code === 'Escape') {
+        currentModal.close();
     }
-    currentModal.close();
-})
-
+}
