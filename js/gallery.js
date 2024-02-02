@@ -98,16 +98,22 @@ container.addEventListener('click', galleryItemClick);
 
 function modalWindow(imgUrl) {
     currentModal = basicLightbox.create(
-        ` <img src="${imgUrl}" width="800" height="600">`
+        `<img src="${imgUrl}" width="800" height="600">`,
+        {
+            onShow: () => {
+                document.addEventListener('keyup', handleKeyUp);
+            },
+            onClose: () => {
+                document.removeEventListener('keyup', handleKeyUp);
+            },
+        }
     );
 
     currentModal.element().addEventListener('click', (event) => {
         if (event.target === currentModal.element()) {
             currentModal.close();
-       }
+        }
     });
-
-    document.addEventListener('keyup', handleKeyUp);
 
     currentModal.show();
 }
@@ -117,4 +123,3 @@ function handleKeyUp({ code }) {
         currentModal.close();
     }
 }
-
